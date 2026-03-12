@@ -9,6 +9,9 @@ app.set("view engine", "ejs");
 app.use(express.static(assetsPath));
 app.use(express.urlencoded({ extended: true }));
 
+const passport = require("passport");
+const session = require("./config/passport");
+
 app.use("/", indexRouter);
 
 const PORT = 3030;

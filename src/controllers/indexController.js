@@ -1,6 +1,7 @@
 const { body, validationResult, matchedData } = require("express-validator");
 const dbQuery = require("../db/queries");
 const errorMsg = require("../public/error");
+const passport = require("passport");
 
 const validateUser = [
   body("firstName")
@@ -19,6 +20,10 @@ const validateUser = [
     .trim()
     .isEmail()
     .withMessage(`Email is: ${errorMsg.emailErr}`),
+  body("password").isLength({ min: 1 }),
+  body("confirmPw")
+    .custom((value, { req }) => value === req.body.password)
+    .withMessage("Passwords do not match."),
 ];
 
 const links = [
@@ -31,6 +36,7 @@ function indexPage(req, res) {
   res.render("index", {
     title: "Index Page",
     links: links,
+    user: req.user,
   });
 }
 
@@ -66,11 +72,26 @@ const createUser = [
         errors: errors.array(),
       });
     }
-    const { firstName, lastName } = matchedData(req);
-    console.log({ firstName, lastName });
+    const { userEmail, firstName, lastName, password } = matchedData(req);
+    console.log(`Controller: ${password}`);
+    dbQuery.createNewUser(userEmail, firstName, lastName, password);
     res.redirect("/");
   },
 ];
+
+const loginUser = passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/",
+});
+
+function logout(req, res, next) {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+}
 
 module.exports = {
   indexPage,
@@ -78,4 +99,6 @@ module.exports = {
   loginPage,
   createNewUser,
   createUser,
+  loginUser,
+  logout,
 };

@@ -11,9 +11,19 @@
 </head>
 
 <body>
-  <%= title%>
 
-    <%- include('partials/navbar', {links:links}) %>
+  <%= title%>
+    <%- include("partials/errors.ejs") %>
+
+      <% if (locals.user) {%>
+        <h1>WELCOME BACK <%= user.username %>
+        </h1>
+        <a href="/logout">log-out</a>
+        <% } else { %>
+          <h1>please log in</h1>
+
+          <%} %>
+            <%- include('partials/navbar', {links:links}) %>
 </body>
 
 </html>

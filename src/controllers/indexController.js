@@ -26,6 +26,12 @@ const validateUser = [
     .withMessage("Passwords do not match."),
 ];
 
+const verifyStatus = [
+  body("question")
+    .custom((value) => value === "2")
+    .withMessage("Incorrect answer, try again if you want to become a member."),
+];
+
 const links = [
   { href: "/", text: "Home" },
   { href: "/signup", text: "Sign-up" },
@@ -73,10 +79,18 @@ const createUser = [
       });
     }
     const { userEmail, firstName, lastName, password } = matchedData(req);
-    console.log(`Controller: ${password}`);
+
     dbQuery.createNewUser(userEmail, firstName, lastName, password);
     res.redirect("/");
   },
+];
+
+const loginUser2 = [
+  (res, req, next) =>
+    passport.authenticate("local", {
+      failureRedirect: "/",
+      failureMessage: true,
+    })(req, res, next),
 ];
 
 const loginUser = passport.authenticate("local", {
@@ -93,6 +107,32 @@ function logout(req, res, next) {
   });
 }
 
+function profile(req, res) {
+  const errors = req.session.errors || [];
+  req.session.errors = null;
+  res.render("profile", {
+    title: "Profile Page",
+    links: [{ href: "/", text: "Home" }],
+    user: req.user,
+    errors: errors,
+  });
+}
+
+const verifyMember = [
+  verifyStatus,
+  (req, res) => {
+    const errors = validationResult(req);
+    if (errors.array().length !== 0) {
+      console.log("errors exist");
+      console.log(errors);
+    } else {
+      console.log("no errors");
+    }
+    req.session.errors = errors.array();
+    //appending errors to session which can be accessed in the profile GET
+    res.redirect("/profile");
+  },
+];
 module.exports = {
   indexPage,
   signupPage,
@@ -101,4 +141,6 @@ module.exports = {
   createUser,
   loginUser,
   logout,
+  profile,
+  verifyMember,
 };

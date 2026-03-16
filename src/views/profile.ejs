@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <%= title%>
+  </title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <%= title%>
+
+    <div>This is <%= locals.user.first_name%>'s profile</div>
+    <div>You are currently <%= locals.user.member_status ? "is" : "is not" %> a special member </div>
+
+
+    <% if (locals.errors) {%>
+      <ul>
+        <% errors.forEach(function(error) { %>
+          <li>
+            <%= error.msg %>
+          </li>
+          <% }); %>
+      </ul>
+      <% } %>
+
+        <% if (!locals.user?.member_status) {%>
+          <div>Answer this correctly to become a member.</div>
+          <form method="POST" action="/becomeMember" autocomplete="off">
+            <label for="question">What is 1+1:</label>
+            <input type="text" id="question" name="question">
+
+            <button> SUBMIT</button>
+          </form>
+          <%}%>
+
+
+
+            <%- include('partials/navbar', {links:links}) %>
+</body>
+
+</html>

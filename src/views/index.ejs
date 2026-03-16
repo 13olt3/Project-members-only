@@ -15,8 +15,10 @@
   <%= title%>
     <%- include("partials/errors.ejs") %>
 
+
+
       <% if (locals.user) {%>
-        <h1>WELCOME BACK <%= user.username %>
+        <h1>Welcome back, <%= user.first_name %>
         </h1>
         <a href="/logout">log-out</a>
         <% } else { %>
@@ -24,6 +26,10 @@
 
           <%} %>
             <%- include('partials/navbar', {links:links}) %>
+
+              <% if (locals.user){%>
+                <a href="/profile">Profile</a>
+                <%}%>
 </body>
 
 </html>

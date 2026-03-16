@@ -23,12 +23,13 @@ app.use(
     }),
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }, // 1 day
   }),
 );
-app.use(passport.session());
+
 app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/", indexRouter);
 

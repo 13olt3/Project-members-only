@@ -13,4 +13,6 @@ async function createNewUser(userEmail, firstName, lastName, password) {
   }
 }
 
-module.exports = { createNewUser };
+async function updateMemberStatus(userId) {}
+
+module.exports = { createNewUser, updateMemberStatus };

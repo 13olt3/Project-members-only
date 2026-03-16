@@ -122,17 +122,16 @@ const verifyMember = [
   verifyStatus,
   (req, res) => {
     const errors = validationResult(req);
-    if (errors.array().length !== 0) {
-      console.log("errors exist");
-      console.log(errors);
-    } else {
-      console.log("no errors");
+    if (errors.array().length === 0) {
+      dbQuery.updateMemberStatus(req.user.id);
     }
+    // console.log(req.user.id);
     req.session.errors = errors.array();
     //appending errors to session which can be accessed in the profile GET
     res.redirect("/profile");
   },
 ];
+
 module.exports = {
   indexPage,
   signupPage,

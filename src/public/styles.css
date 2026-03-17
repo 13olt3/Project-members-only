@@ -1,6 +1,6 @@
 body {
   display: grid;
-  grid-template-rows: 1fr 5fr;
+  grid-template-rows: auto-fit 5fr;
 }
 
 .dash-board {
@@ -28,7 +28,8 @@ li {
 }
 .messages {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
+
   gap: 5px;
   border: black 2px solid;
   padding: 10px;
@@ -38,4 +39,9 @@ li {
 .message-card {
   border: black 2px solid;
   padding: 10px;
+}
+.create-message {
+  /* display: grid; */
+  /* grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); */
+  height: 50%;
 }

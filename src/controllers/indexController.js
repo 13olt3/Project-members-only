@@ -19,7 +19,7 @@ const validateUser = [
   body("userEmail")
     .trim()
     .isEmail()
-    .withMessage(`Email is: ${errorMsg.emailErr}`),
+    .withMessage(`Email is ${errorMsg.emailErr}`),
   body("password").isLength({ min: 1 }),
   body("confirmPw")
     .custom((value, { req }) => value === req.body.password)

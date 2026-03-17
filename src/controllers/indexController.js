@@ -19,7 +19,14 @@ const validateUser = [
   body("userEmail")
     .trim()
     .isEmail()
-    .withMessage(`Email is ${errorMsg.emailErr}`),
+    .withMessage(`Email is ${errorMsg.emailErr}`)
+    .custom(async (value) => {
+      const user = await dbQuery.checkEmail(value);
+      if (user) {
+        throw new Error(errorMsg.emailInUseErr);
+      }
+      return true;
+    }),
   body("password").isLength({ min: 1 }),
   body("confirmPw")
     .custom((value, { req }) => value === req.body.password)
@@ -30,6 +37,7 @@ const validateMessage = [body("newMessage").trim()];
 
 const verifyStatus = [
   body("question")
+    .trim()
     .custom((value) => value === "2")
     .withMessage("Incorrect answer, try again if you want to become a member."),
 ];

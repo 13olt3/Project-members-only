@@ -56,10 +56,17 @@ async function deleteMessage(messageId) {
   await pool.query(query, [messageId]);
 }
 
+async function checkEmail(email) {
+  const query = `SELECT * FROM user_table WHERE email = $1`;
+  const result = await pool.query(query, [email]);
+  return result.rows[0];
+}
+
 module.exports = {
   createNewUser,
   updateMemberStatus,
   createNewMessage,
   getAllMessages,
   deleteMessage,
+  checkEmail,
 };

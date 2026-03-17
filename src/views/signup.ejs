@@ -28,11 +28,14 @@
         <label for="confirmPw">Confirm Password:</label>
         <input type="password" id="confirmPw" name="confirmPw">
 
+        <label for="isAdmin">Admin user:</label>
+        <input type="checkbox" id="isAdmin" name="isAdmin">
+
         <button> SUBMIT</button>
 
       </form>
 
-      <%- include('partials/navbar', {links:links}) %>
+      <%- include('partials/navbar') %>
 </body>
 
 </html>

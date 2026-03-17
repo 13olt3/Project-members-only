@@ -1,0 +1,41 @@
+body {
+  display: grid;
+  grid-template-rows: 1fr 5fr;
+}
+
+.dash-board {
+  border-bottom: solid black 2px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1em;
+  justify-content: flex-end;
+}
+
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  margin-top: 1em;
+  display: grid;
+  grid-template-rows: 1fr 6fr;
+}
+.messages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 5px;
+  border: black 2px solid;
+  padding: 10px;
+
+  line-height: 1.5;
+}
+.message-card {
+  border: black 2px solid;
+  padding: 10px;
+}

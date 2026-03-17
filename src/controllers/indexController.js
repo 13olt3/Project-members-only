@@ -26,61 +26,52 @@ const validateUser = [
     .withMessage("Passwords do not match."),
 ];
 
+const validateMessage = [body("newMessage").trim()];
+
 const verifyStatus = [
   body("question")
     .custom((value) => value === "2")
     .withMessage("Incorrect answer, try again if you want to become a member."),
 ];
 
-const links = [
-  { href: "/", text: "Home" },
-  { href: "/signup", text: "Sign-up" },
-  { href: "/login", text: "Login" },
-];
+async function indexPage(req, res) {
+  const messages = await dbQuery.getAllMessages();
 
-function indexPage(req, res) {
   res.render("index", {
     title: "Index Page",
-    links: links,
     user: req.user,
+    messages: messages,
   });
 }
 
 function signupPage(req, res) {
   res.render("signup", {
     title: "Signup Page",
-    links: links,
   });
 }
 
 function loginPage(req, res) {
   res.render("login", {
     title: "Login Page",
-    links: links,
   });
-}
-function createNewUser(req, res) {
-  const userData = {
-    userEmail: req.body.userEmail,
-    password: req.body.password,
-    confirmPw: req.body.confirmPw,
-  };
 }
 
 const createUser = [
   validateUser,
   (req, res) => {
     const errors = validationResult(req);
+    const isAdmin = req.body.isAdmin === "on";
+
     if (!errors.isEmpty()) {
       return res.status(400).render("signup", {
         title: "sign-up",
-        links: links,
+
         errors: errors.array(),
       });
     }
     const { userEmail, firstName, lastName, password } = matchedData(req);
 
-    dbQuery.createNewUser(userEmail, firstName, lastName, password);
+    dbQuery.createNewUser(userEmail, firstName, lastName, password, isAdmin);
     res.redirect("/");
   },
 ];
@@ -112,7 +103,6 @@ function profile(req, res) {
   req.session.errors = null;
   res.render("profile", {
     title: "Profile Page",
-    links: [{ href: "/", text: "Home" }],
     user: req.user,
     errors: errors,
   });
@@ -132,14 +122,40 @@ const verifyMember = [
   },
 ];
 
+function newMessage(req, res) {
+  res.render("createMessage", { title: "Create New Message" });
+}
+
+const createMessage = [
+  validateMessage,
+  (req, res) => {
+    const { newMessage } = matchedData(req);
+    const messageData = [req.user.id, newMessage, req.user.member_status];
+    dbQuery.createNewMessage(messageData);
+    res.redirect("/");
+  },
+];
+
+async function getAllMessages(req, res) {
+  const results = await dbQuery.getAllMessages();
+}
+
+async function deleteMessage(req, res) {
+  await dbQuery.deleteMessage(req.params.id);
+  res.redirect("/");
+}
+
 module.exports = {
   indexPage,
   signupPage,
   loginPage,
-  createNewUser,
   createUser,
   loginUser,
   logout,
   profile,
   verifyMember,
+  newMessage,
+  createMessage,
+  getAllMessages,
+  deleteMessage,
 };

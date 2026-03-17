@@ -19,25 +19,19 @@
 
     <%- include('partials/navbar') %>
 
-
   </div>
 
   <div class="main-content">
-    <div>Message Board
-      <% if (locals.user){%>
-        <a href="/createMessage">Create new message</a>
 
-        <%}%>
-    </div>
-
-    <div><%- include('partials/messages') %></div>
+    <form method="POST" action="/createMessage" autocomplete="off">
+      <label for="message">Message:</label>
+      <textarea type="text" id="message" name="newMessage" class="create-message" cols="30" rows="10"> </textarea>
 
 
+      <button> SUBMIT</button>
 
-
+    </form>
   </div>
-
-
 
 </body>
 
